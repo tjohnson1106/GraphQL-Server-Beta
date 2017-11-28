@@ -3,11 +3,17 @@ export default `
   message: String!
 }
  
- 
-  type Tweet {
-    _id: ID!
-    text: String!
-  }
+scalar Date
+
+type Tweet {
+  _id: ID!
+  text: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+
+
 
 
 
