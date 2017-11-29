@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "apollo-server-express": "^1.0.2",
+    "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.17.2",
     "cross-env": "^5.0.1",
     "express": "^4.15.3",
@@ -23,8 +24,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "eslint": "^4.12.0",
-    "eslint-config-equimper": "^2.2.1",
-    "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-react": "^7.5.1",
     "nodemon": "^1.11.0",
     "prettier": "^1.8.2"
