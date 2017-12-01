@@ -1,15 +1,55 @@
 import Tweet from "../../models/Tweet";
-import { hashSync } from "bcrypt-nodejs";
+import { requireAuth } from "../../services/auth";
 
 export default {
-  createTweet: (_, args) => Tweet.create(args),
-  getTweet: (_, { _id }) => Tweet.findById(_id),
-  getTweets: () => Tweet.find({}).sort({ createdAt: -1 }),
-  updateTweet: (_, { _id, ...rest }) =>
-    Tweet.findByIdAndUpdate(_id, rest, { new: true }),
-  deleteTweet: async (_, { _id }) => {
+  getTweet: async (_, { _id }, { user }) => {
     try {
-      await Tweet.findByIdAndRemove(_id);
+      await requireAuth(user);
+      return Tweet.findById(_id);
+    } catch (error) {
+      throw error;
+    }
+  },
+  getTweets: async (_, args, { user }) => {
+    try {
+      await requireAuth(user);
+      return Tweet.find({}).sort({ createdAt: -1 });
+    } catch (error) {
+      throw error;
+    }
+  },
+  createTweet: async (_, args, { user }) => {
+    try {
+      await requireAuth(user);
+      return Tweet.create({ ...args, user: user.id });
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateTweet: async (_, { _id, ...rest }, { user }) => {
+    try {
+      await requireAuth(user);
+      const tweet = await Tweet.findOne({ _id, user: user.id });
+
+      if (!tweet) {
+        throw new Error("Not found!");
+      }
+
+      Object.entries(rest).forEach(([key, value]) => {
+        tweet[key] = value;
+      });
+
+      return Tweet.save();
+    } catch (error) {
+      throw error;
+    }
+  },
+  deleteTweet: async (_, { _id }, { user }) => {
+    try {
+      await requireAuth(user);
+      const tweet = await Tweet.findOne({ _id, user: user.id });
+
+      await Tweet.remove;
       return {
         message: "Delete Success!"
       };
